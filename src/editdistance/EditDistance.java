@@ -1,29 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package editdistance;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  *
  * @author Manuel
  */
 public class EditDistance {
-
-    /**
-     * @param args the command line arguments
-     */
+    private final static Map<String,Integer> memoMap= new HashMap<>();
+    
     public static void main(String[] args) {
         
-        String str1 = "gato";
-        String str2 = "cat";
-        System.out.println("Distancia Lev: " + memo(str1, 4, str2, 3));
+        String str1 = "sunday";
+        String str2 = "saturday";
+        int m=str1.length();
+        int n=str2.length();
+        int memoRes=memo(str1,m , str2, n);
+        System.out.println("Distancia Lev: " + memoRes);
         System.out.println("Distancia Lev: " + tabu(str1, str2));
         
     }
     
     public static int memo(String str1, int m, String str2, int n) {
+        String key= Integer.toString(m)+""+Integer.toString(n);
+        if(EditDistance.memoMap.containsKey(key)){
+            return EditDistance.memoMap.get(key);
+        }
         if(m == 0) {
             return n;
         }
@@ -31,10 +35,11 @@ public class EditDistance {
             return m;
         }
         if(str1.charAt(m-1) == str2.charAt(n-1)) {
-            return memo(str1, m-1, str2, n-1);
-        } else {
-            return 1 + Math.min(memo(str1, m - 1, str2, n) +1, Math.min(memo(str1, m, str2, n-1) +1, memo(str1, m-1, str2, n-1)));
+            EditDistance.memoMap.put(key, memo(str1, m-1, str2, n-1));
+            return EditDistance.memoMap.get(key);
         }
+        EditDistance.memoMap.put(key, 1+Math.min(memo(str1, m - 1, str2, n),Math.min(memo(str1, m, str2, n-1), memo(str1, m-1, str2, n-1))));
+        return (EditDistance.memoMap.get(key));
     }
     
     public static int tabu(String str1, String str2) {
