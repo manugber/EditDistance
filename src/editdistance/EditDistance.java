@@ -18,8 +18,8 @@ public class EditDistance {
         int m=str1.length();
         int n=str2.length();
         int memoRes=memo(str1,m , str2, n);
-        System.out.println("Distancia Lev: " + memoRes);
-        System.out.println("Distancia Lev: " + tabu(str1, str2));
+        System.out.println("Distancia Memoization: " + memoRes);
+        System.out.println("Distancia Tabulation: " + tabu(str1, str2));
         
     }
     
